@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GeoMoney · การออมเงินด้วยอนุกรมเรขาคณิต</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700;800&family=Sarabun:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- floating background coins -->
+<div class="bg-decor" aria-hidden="true">
+  <span class="coin c1">฿</span>
+  <span class="coin c2">฿</span>
+  <span class="coin c3">฿</span>
+  <span class="coin c4">฿</span>
+  <span class="coin c5">฿</span>
+  <span class="coin c6">฿</span>
+</div>
+
+<!-- hidden svg defs -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <clipPath id="jarClip">
+      <rect x="15" y="26" width="70" height="74" rx="14"></rect>
+    </clipPath>
+    <linearGradient id="goldGrad" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" stop-color="#E8A400"/>
+      <stop offset="100%" stop-color="#FFD84D"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="eyebrow">โครงงานคณิตศาสตร์ · เรื่อง อนุกรมเรขาคณิตกับการวางแผนการออมเงิน</p>
+    <h1>GeoMoney<span class="highlight">การออมเงินด้วยอนุกรมเรขาคณิต</span></h1>
+    <p class="sub">Geonetric Series & Money — การออมเงินด้วยอนุกรมเรขาคณิต จำลองแผนออมเงินแบบ Real-time ด้วยสูตร<br class="br-desktop">ค่างวดรับอนาคต (Future Value of Annuity Due)</p>
+    <div class="hero-formula">
+      <span>S<sub>n</sub></span><span>=</span><span>R(1+r)</span>
+      <span class="bracket">[</span>
+      <span class="frac"><span class="num">(1+r)<sup>n</sup> − 1</span><span class="den">r</span></span>
+      <span class="bracket">]</span>
+    </div>
+  </div>
+  <div class="hero-piggy" aria-hidden="true">🐷</div>
+</header>
+
+<nav class="mission-nav" role="tablist" aria-label="เลือกภารกิจ">
+  <button class="mission-btn active" data-mission="1" role="tab" aria-selected="true">
+    <span class="m-num">1</span>
+    <span class="m-text">หาเงินอนาคต<br><b>S<sub>n</sub></b></span>
+  </button>
+  <button class="mission-btn" data-mission="2" role="tab" aria-selected="false">
+    <span class="m-num">2</span>
+    <span class="m-text">หาเงินออม/เดือน<br><b>R</b></span>
+  </button>
+  <button class="mission-btn" data-mission="3" role="tab" aria-selected="false">
+    <span class="m-num">3</span>
+    <span class="m-text">หาระยะเวลา<br><b>n</b></span>
+  </button>
+  <button class="mission-btn" data-mission="4" role="tab" aria-selected="false">
+    <span class="m-num">4</span>
+    <span class="m-text">หาอัตราดอกเบี้ย<br><b>r</b></span>
+  </button>
+</nav>
+
+<main>
+
+<!-- ============ MISSION 1 : หา Sn ============ -->
+<section class="mission-panel active" data-panel="1" role="tabpanel">
+  <div class="panel-grid">
+    <div class="controls-card">
+      <h2><span class="tag">โหมดที่ 1</span>อยากรู้เงินอนาคต</h2>
+      <p class="desc">ปรับยอดออมต่อเดือน ดอกเบี้ย และระยะเวลา แล้วดูว่าเงินจะโตเป็นเท่าไหร่</p>
+
+      <div class="field">
+        <label for="m1_R">เงินออมต่อเดือน (R)</label>
+        <div class="field-row">
+          <input type="range" id="m1_R" min="100" max="30000" step="100" value="3000">
+          <div class="num-wrap"><input type="number" id="m1_R_num" min="100" max="30000" step="100" value="3000"><span>บาท</span></div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="m1_rate">อัตราดอกเบี้ยต่อปี (%)</label>
+        <div class="field-row">
+          <input type="range" id="m1_rate" min="0" max="10" step="0.1" value="3">
+          <div class="num-wrap"><input type="number" id="m1_rate_num" min="0" max="10" step="0.1" value="3"><span>%</span></div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="m1_years">ระยะเวลาออม (ปี)</label>
+        <div class="field-row">
+          <input type="range" id="m1_years" min="1" max="40" step="1" value="15">
+          <div class="num-wrap"><input type="number" id="m1_years_num" min="1" max="40" step="1" value="15"><span>ปี</span></div>
+        </div>
+      </div>
+
+      <div class="formula-box">
+        <div class="formula-line" id="m1_formula"></div>
+      </div>
+    </div>
+
+    <div class="result-card">
+      <p class="result-label">เงินรวมในอนาคตของคุณ</p>
+      <p class="result-value"><span id="m1_result">0</span> <small>บาท</small></p>
+      <p class="result-status" id="m1_status">กำลังคำนวณ...</p>
+
+      <div class="jar-wrap">
+        <svg viewBox="0 0 100 110" class="jar">
+          <rect class="jar-fill" id="m1_fill" x="15" y="100" width="70" height="0" fill="url(#goldGrad)" clip-path="url(#jarClip)"></rect>
+          <circle class="jar-coin jc1" cx="35" cy="60" r="5"></circle>
+          <circle class="jar-coin jc2" cx="55" cy="70" r="5"></circle>
+          <circle class="jar-coin jc3" cx="65" cy="50" r="5"></circle>
+          <rect class="jar-outline" x="15" y="26" width="70" height="74" rx="14"></rect>
+          <rect class="jar-neck" x="35" y="16" width="30" height="12"></rect>
+          <rect class="jar-lid" x="30" y="6" width="40" height="12" rx="4"></rect>
+        </svg>
+        <p class="jar-caption"><span id="m1_percent">0</span>% ของเป้าหมาย <b>1,000,000</b> บาท</p>
+      </div>
+
+      <canvas id="m1_chart" class="chart" width="600" height="220"></canvas>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MISSION 2 : หา R ============ -->
+<section class="mission-panel" data-panel="2" role="tabpanel">
+  <div class="panel-grid">
+    <div class="controls-card">
+      <h2><span class="tag">โหมดที่ 2</span>อยากรู้ต้องออมเดือนละเท่าไหร่</h2>
+      <p class="desc">ตั้งเป้าหมายเงินก้อน แล้วดูว่าต้องออมเดือนละกี่บาทถึงจะถึงฝัน</p>
+
+      <div class="field">
+        <label for="m2_target">เป้าหมายเงินก้อน (S<sub>n</sub>)</label>
+        <div class="field-row">
+          <input type="range" id="m2_target" min="100000" max="5000000" step="50000" value="1000000">
+          <div class="num-wrap"><input type="number" id="m2_target_num" min="10000" max="20000000" step="10000" value="1000000"><span>บาท</span></div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="m2_rate">อัตราดอกเบี้ยต่อปี (%)</label>
+        <div class="field-row">
+          <input type="range" id="m2_rate" min="0" max="10" step="0.1" value="3">
+          <div class="num-wrap"><input type="number" id="m2_rate_num" min="0" max="10" step="0.1" value="3"><span>%</span></div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="m2_years">ระยะเวลาออม (ปี)</label>
+        <div class="field-row">
+          <input type="range" id="m2_years" min="1" max="40" step="1" value="20">
+          <div class="num-wrap"><input type="number" id="m2_years_num" min="1" max="40" step="1" value="20"><span>ปี</span></div>
+        </div>
+      </div>
+
+      <div class="formula-box">
+        <div class="formula-line" id="m2_formula"></div>
+      </div>
+    </div>
+
+    <div class="result-card">
+      <p class="result-label">ต้องออมเดือนละ</p>
+      <p class="result-value"><span id="m2_result">0</span> <small>บาท / เดือน</small></p>
+      <p class="result-status" id="m2_status">กำลังคำนวณ...</p>
+
+      <div class="jar-wrap">
+        <svg viewBox="0 0 100 110" class="jar">
+          <rect class="jar-fill" id="m2_fill" x="15" y="100" width="70" height="0" fill="url(#goldGrad)" clip-path="url(#jarClip)"></rect>
+          <circle class="jar-coin jc1" cx="35" cy="60" r="5"></circle>
+          <circle class="jar-coin jc2" cx="55" cy="70" r="5"></circle>
+          <circle class="jar-coin jc3" cx="65" cy="50" r="5"></circle>
+          <rect class="jar-outline" x="15" y="26" width="70" height="74" rx="14"></rect>
+          <rect class="jar-neck" x="35" y="16" width="30" height="12"></rect>
+          <rect class="jar-lid" x="30" y="6" width="40" height="12" rx="4"></rect>
+        </svg>
+        <p class="jar-caption">แผนนี้พาไปถึง <span id="m2_percent">0</span>% ของเป้าหมาย</p>
+      </div>
+
+      <canvas id="m2_chart" class="chart" width="600" height="220"></canvas>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MISSION 3 : หา n ============ -->
+<section class="mission-panel" data-panel="3" role="tabpanel">
+  <div class="panel-grid">
+    <div class="controls-card">
+      <h2><span class="tag">โหมดที่ 3</span>อยากรู้ว่าจะใช้เวลากี่ปี</h2>
+      <p class="desc">ตั้งเป้าหมายและยอดออมต่อเดือน แล้วดูว่าต้องใช้เวลานานแค่ไหน</p>
+
+      <div class="field">
+        <label for="m3_target">เป้าหมายเงินก้อน (S<sub>n</sub>)</label>
+        <div class="field-row">
+          <input type="range" id="m3_target" min="100000" max="5000000" step="50000" value="1000000">
+          <div class="num-wrap"><input type="number" id="m3_target_num" min="10000" max="20000000" step="10000" value="1000000"><span>บาท</span></div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="m3_R">เงินออมต่อเดือน (R)</label>
+        <div class="field-row">
+          <input type="range" id="m3_R" min="100" max="30000" step="100" value="5000">
+          <div class="num-wrap"><input type="number" id="m3_R_num" min="100" max="30000" step="100" value="5000"><span>บาท</span></div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="m3_rate">อัตราดอกเบี้ยต่อปี (%)</label>
+        <div class="field-row">
+          <input type="range" id="m3_rate" min="0" max="10" step="0.1" value="3">
+          <div class="num-wrap"><input type="number" id="m3_rate_num" min="0" max="10" step="0.1" value="3"><span>%</span></div>
+        </div>
+      </div>
+
+      <div class="formula-box">
+        <div class="formula-line" id="m3_formula"></div>
+      </div>
+    </div>
+
+    <div class="result-card">
+      <p class="result-label">ใช้เวลาออมประมาณ</p>
+      <p class="result-value"><span id="m3_result">0</span> <small id="m3_unit">ปี</small></p>
+      <p class="result-status" id="m3_status">กำลังคำนวณ...</p>
+
+      <div class="jar-wrap">
+        <svg viewBox="0 0 100 110" class="jar">
+          <rect class="jar-fill" id="m3_fill" x="15" y="100" width="70" height="0" fill="url(#goldGrad)" clip-path="url(#jarClip)"></rect>
+          <circle class="jar-coin jc1" cx="35" cy="60" r="5"></circle>
+          <circle class="jar-coin jc2" cx="55" cy="70" r="5"></circle>
+          <circle class="jar-coin jc3" cx="65" cy="50" r="5"></circle>
+          <rect class="jar-outline" x="15" y="26" width="70" height="74" rx="14"></rect>
+          <rect class="jar-neck" x="35" y="16" width="30" height="12"></rect>
+          <rect class="jar-lid" x="30" y="6" width="40" height="12" rx="4"></rect>
+        </svg>
+        <p class="jar-caption">ครบเป้าหมายที่ <span id="m3_percent">0</span>%</p>
+      </div>
+
+      <canvas id="m3_chart" class="chart" width="600" height="220"></canvas>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MISSION 4 : หา r ============ -->
+<section class="mission-panel" data-panel="4" role="tabpanel">
+  <div class="panel-grid">
+    <div class="controls-card">
+      <h2><span class="tag">โหมดที่ 4</span>อยากรู้ต้องได้ดอกเบี้ยเท่าไหร่</h2>
+      <p class="desc">มีเงินออมและระยะเวลาตายตัว แล้วอยากรู้ว่าต้องหาผลตอบแทนกี่ % ถึงจะถึงฝัน</p>
+
+      <div class="field">
+        <label for="m4_target">เป้าหมายเงินก้อน (S<sub>n</sub>)</label>
+        <div class="field-row">
+          <input type="range" id="m4_target" min="100000" max="5000000" step="50000" value="1000000">
+          <div class="num-wrap"><input type="number" id="m4_target_num" min="10000" max="20000000" step="10000" value="1000000"><span>บาท</span></div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="m4_R">เงินออมต่อเดือน (R)</label>
+        <div class="field-row">
+          <input type="range" id="m4_R" min="100" max="30000" step="100" value="5000">
+          <div class="num-wrap"><input type="number" id="m4_R_num" min="100" max="30000" step="100" value="5000"><span>บาท</span></div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="m4_years">ระยะเวลาออม (ปี)</label>
+        <div class="field-row">
+          <input type="range" id="m4_years" min="1" max="40" step="1" value="15">
+          <div class="num-wrap"><input type="number" id="m4_years_num" min="1" max="40" step="1" value="15"><span>ปี</span></div>
+        </div>
+      </div>
+
+      <div class="formula-box">
+        <div class="formula-line" id="m4_formula"></div>
+        <p class="hint">* หาค่า r ด้วยวิธีเชิงตัวเลข (Bisection Method) ผ่านสมการเดียวกัน</p>
+      </div>
+    </div>
+
+    <div class="result-card">
+      <p class="result-label">ต้องการอัตราดอกเบี้ยต่อปี</p>
+      <p class="result-value"><span id="m4_result">0</span> <small>% ต่อปี</small></p>
+      <p class="result-status" id="m4_status">กำลังคำนวณ...</p>
+
+      <div class="jar-wrap">
+        <svg viewBox="0 0 100 110" class="jar">
+          <rect class="jar-fill" id="m4_fill" x="15" y="100" width="70" height="0" fill="url(#goldGrad)" clip-path="url(#jarClip)"></rect>
+          <circle class="jar-coin jc1" cx="35" cy="60" r="5"></circle>
+          <circle class="jar-coin jc2" cx="55" cy="70" r="5"></circle>
+          <circle class="jar-coin jc3" cx="65" cy="50" r="5"></circle>
+          <rect class="jar-outline" x="15" y="26" width="70" height="74" rx="14"></rect>
+          <rect class="jar-neck" x="35" y="16" width="30" height="12"></rect>
+          <rect class="jar-lid" x="30" y="6" width="40" height="12" rx="4"></rect>
+        </svg>
+        <p class="jar-caption">ครบเป้าหมายที่ <span id="m4_percent">0</span>%</p>
+      </div>
+
+      <canvas id="m4_chart" class="chart" width="600" height="220"></canvas>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <p>โครงงานคณิตศาสตร์  · เรื่อง อนุกรมเรขาคณิตกับการวางแผนการออมเงิน</p>
+  <p class="small">สูตรที่ใช้: S<sub>n</sub> = R(1+r)[((1+r)ⁿ−1)/r] · r = อัตราดอกเบี้ยต่องวด (ต่อปี ÷ 100 ÷ 12) · n = จำนวนงวด (ปี × 12)</p>
+</footer>
+
+<div id="confetti-layer" aria-hidden="true"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
